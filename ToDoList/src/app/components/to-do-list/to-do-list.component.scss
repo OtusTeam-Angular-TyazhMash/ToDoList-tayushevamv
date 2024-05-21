@@ -4,4 +4,22 @@
 
 li {
     background-color: silver;
+    padding: 5px;
+
+}
+
+.button{
+    color: white;
+    border-style: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;    
+}
+
+.button-add{
+    background-color: green;   
+}
+
+.button-delete{
+    background-color: red;     
 }
