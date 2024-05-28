@@ -3,9 +3,13 @@
 <ul>
     <li *ngFor="let elem of elements">
         <input type="text" [value]="elem.text">
-        <button class="button button-delete">Удалить</button>
+        <button class="button button-delete" (click)="deleteItem(elem.id)">Удалить</button>
     </li>
 </ul>
 
-<input id="newText" type="text" size="40" placeholder="Введите новый элемент">
-<input class="styled button button-add" type="button" [disabled]="" name="add" value="Добавить задачу"/>    
+<mat-form-field appearance="outline">
+    <mat-label>Новая задача</mat-label>
+    <input matInput placeholder="Placeholder" [(ngModel)]="newValue">
+    <mat-hint></mat-hint>
+</mat-form-field>
+<button class="button button-add" [disabled]="newValue ? false : true" (click)="addItem()">Добавить</button>    

@@ -1,11 +1,15 @@
-.styled {
-   background-color: darkorchid;     
+li {
+    padding: 5px;
 }
 
-li {
-    background-color: silver;
-    padding: 5px;
-
+input, mat-form-field {
+    border-style: solid;
+    border-color: grey;
+    border-radius: 5px; 
+    border-width: 1px;   
+    padding-top: 5px; 
+    padding-bottom: 5px;
+    width: 500px;
 }
 
 .button{
@@ -14,6 +18,10 @@ li {
     border-radius: 5px;
     padding: 5px;
     margin: 5px;    
+
+    :disabled{
+     opacity: 0.5;
+    }
 }
 
 .button-add{
