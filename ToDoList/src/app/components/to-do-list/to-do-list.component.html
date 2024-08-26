@@ -1,19 +1,35 @@
 <h1>ToDO List</h1>
-
-<div *ngIf="isLoading">
-  <mat-spinner [diameter]="50"></mat-spinner>
-</div>
-<div *ngIf="!isLoading">
-  <ul>
-    <li *ngFor="let elem of elements">
-      <app-to-do-list-item [listItem]="elem" (deleteItemEvent)="deleteItem($event)"></app-to-do-list-item>
-    </li>
-  </ul>
-
-  <mat-form-field>
-    <mat-label>Новая задача</mat-label>
-    <input matInput type="text" [(ngModel)]="newValue">
-  </mat-form-field>
-  <app-button class="button button-add" title="Добавить" [disabled]="!newValue" (click)="addItem()" />  
-</div>
-  
+<ng-container *ngIf="isLoading === true; then loading; else notloading" />
+  <ng-template #loading>
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </ng-template>
+  <ng-template #notloading>
+    <div class="list-block">
+      <ul>
+        <li *ngFor="let elem of elements" (click)="onClickItem(elem.id)">
+          <app-to-do-list-item [listItem]="elem" (deleteItemEvent)="deleteItem($event)" 
+                                [class.selected]="elem.id === selectedItemId"
+                                [appTooltip]="'Нажми чтобы посмотреть описание'">
+          </app-to-do-list-item>
+        </li>
+      </ul>
+      <div class="description-block">
+        <h4>Описание</h4>
+        <ng-container *ngIf="selectedItemId!=null">
+           <h5>{{getDescription()}}</h5>
+        </ng-container>
+      </div>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Новая задача</mat-label>
+        <input matInput type="text" [(ngModel)]="newValue">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Описание</mat-label>
+        <input matInput type="text" [(ngModel)]="newDescription">
+      </mat-form-field>  
+      <app-button class="button button-add" title="Добавить" [disabled]="!newValue" (click)="addItem()" 
+                  [appTooltip]="'Добавить в список дел'"/>  
+    </div>
+  </ng-template>
