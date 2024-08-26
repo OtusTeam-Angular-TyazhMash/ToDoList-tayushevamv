@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-
-type listElement = {id: number, text: string};
+import { IListItem } from 'src/app/models/to-do-list.model';
 
 @Component({
   selector: 'app-to-do-list',
@@ -11,10 +10,10 @@ export class ToDoListComponent {
 
   newValue: string = '';
 
-  elements: Array<listElement> = [ {id: 1, text: 'By a new gaming laptop'}, 
-                              {id: 2, text: 'Complete previous task'}, 
-                              {id: 3, text: 'Create some angular app'}
-                            ];
+  elements: Array<IListItem> = [ {id: 1, text: 'By a new gaming laptop'}, 
+                                  {id: 2, text: 'Complete previous task'}, 
+                                  {id: 3, text: 'Create some angular app'}
+                                ];
 
   addItem() : void {
     if (this.newValue) {
@@ -25,10 +24,11 @@ export class ToDoListComponent {
     }
   }
 
-  deleteItem(id: number) : void {
-    console.log('delItem ' + id);
-   // elements.[id]
-  }
+  deleteItem(id: number): void {
+    const index: number = this.elements.findIndex(item => item.id === id);
+    if (index >= 0)
+        this.elements.splice(index, 1);
+}
 
 }
 

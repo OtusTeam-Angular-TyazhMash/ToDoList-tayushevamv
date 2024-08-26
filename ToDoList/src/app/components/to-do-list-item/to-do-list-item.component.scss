@@ -3,14 +3,6 @@
     padding: 5px;
 }
 
-h1 {
-    color:darkslateblue
-}
-
-li {
-    padding: 5px;
-}
-
 input{   
     flex: auto;
     color: darkblue;
@@ -18,6 +10,7 @@ input{
     border-color: grey;
     border-radius: 5px; 
     border-width: 1px;   
+    min-height: 20px;        
 }
 
 .button{
@@ -26,13 +19,8 @@ input{
     border-radius: 5px;
     padding: 5px;
     margin: 5px;    
-
 }
 
-.button:disabled{
-    opacity: .5;
-}
-
-.button-add{
-    background-color: lightseagreen;   
+.button-delete{
+    background-color: lightcoral;     
 }

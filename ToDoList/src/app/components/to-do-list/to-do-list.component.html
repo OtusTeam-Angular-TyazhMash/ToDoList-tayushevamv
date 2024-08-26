@@ -2,14 +2,12 @@
 
 <ul>
     <li *ngFor="let elem of elements">
-        <input type="text" [value]="elem.text">
-        <button class="button button-delete" (click)="deleteItem(elem.id)">Удалить</button>
+      <app-to-do-list-item [listItem]="elem" (deleteItemEvent)="deleteItem($event)"></app-to-do-list-item>
     </li>
 </ul>
 
-<mat-form-field appearance="outline">
+<mat-form-field>
     <mat-label>Новая задача</mat-label>
-    <input matInput placeholder="Placeholder" [(ngModel)]="newValue">
-    <mat-hint></mat-hint>
+    <input matInput type="text" [(ngModel)]="newValue">
 </mat-form-field>
-<button class="button button-add" [disabled]="newValue ? false : true" (click)="addItem()">Добавить</button>    
+<button class="button button-add" [disabled]="!newValue" (click)="addItem()">Добавить</button>    
