@@ -19,20 +19,3 @@ input{
     border-radius: 5px; 
     border-width: 1px;   
 }
-
-.button{
-    color: white;
-    border-style: none;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 5px;    
-
-}
-
-.button:disabled{
-    opacity: .5;
-}
-
-.button-add{
-    background-color: lightseagreen;   
-}

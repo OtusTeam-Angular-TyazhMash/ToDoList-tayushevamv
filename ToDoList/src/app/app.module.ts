@@ -7,19 +7,23 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToDoListItemComponent } from './components/to-do-list-item/to-do-list-item.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToDoListComponent,
-    ToDoListItemComponent
+    ToDoListItemComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     BrowserAnimationsModule,
     MatInputModule,
-    MatFormFieldModule    
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    SharedModule    
   ],
   providers: [],
   bootstrap: [AppComponent]

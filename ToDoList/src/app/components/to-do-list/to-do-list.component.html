@@ -1,13 +1,19 @@
 <h1>ToDO List</h1>
 
-<ul>
+<div *ngIf="isLoading">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+<div *ngIf="!isLoading">
+  <ul>
     <li *ngFor="let elem of elements">
       <app-to-do-list-item [listItem]="elem" (deleteItemEvent)="deleteItem($event)"></app-to-do-list-item>
     </li>
-</ul>
+  </ul>
 
-<mat-form-field>
+  <mat-form-field>
     <mat-label>Новая задача</mat-label>
     <input matInput type="text" [(ngModel)]="newValue">
-</mat-form-field>
-<button class="button button-add" [disabled]="!newValue" (click)="addItem()">Добавить</button>    
+  </mat-form-field>
+  <app-button class="button button-add" title="Добавить" [disabled]="!newValue" (click)="addItem()" />  
+</div>
+  
