@@ -6,8 +6,10 @@
   <ng-template #notloading>
     <div class="list-block">
       <ul>
-        <li *ngFor="let elem of elements" (click)="onClickItem(elem.id)">
-          <app-to-do-list-item [listItem]="elem" (deleteItemEvent)="deleteItem($event)" 
+        <li *ngFor="let elem of getList()" (click)="onClickItem(elem.id)">
+          <app-to-do-list-item [listItem]="elem" 
+                                (deleteItemEvent)="deleteItem($event)" 
+                                (editItemEvent)="editItem($event)" 
                                 [class.selected]="elem.id === selectedItemId"
                                 [appTooltip]="'Нажми чтобы посмотреть описание'">
           </app-to-do-list-item>
