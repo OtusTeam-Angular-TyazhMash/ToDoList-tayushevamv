@@ -2,14 +2,17 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToDoListItemComponent } from './components/to-do-list-item/to-do-list-item.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule} from '@angular/material/select';
+import { MatCheckboxModule} from '@angular/material/checkbox';
 import { SharedModule } from './shared/shared.module';
 import { ToastComponent } from './shared/toast/toast.component';
+import { CreateItemComponent } from './components/to-do-create-item/to-do-create-item.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,6 +20,7 @@ import { ToastComponent } from './shared/toast/toast.component';
     ToDoListComponent,
     ToDoListItemComponent,
     ToastComponent,
+    CreateItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,8 +28,11 @@ import { ToastComponent } from './shared/toast/toast.component';
     BrowserAnimationsModule,
     MatInputModule,
     MatFormFieldModule,
-    MatProgressSpinnerModule,
-    SharedModule    
+    MatSelectModule,
+    MatCheckboxModule,
+    SharedModule,
+    ReactiveFormsModule,
+    HttpClientModule        
   ],
   providers: [],
   bootstrap: [AppComponent]

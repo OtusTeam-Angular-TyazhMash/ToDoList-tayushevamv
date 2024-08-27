@@ -1,0 +1,22 @@
+{
+  "to-do-list": [
+    {
+      "id": "1",
+      "text": "Купить новый игровой ПК",
+      "description": "description first",
+      "status": "InProgress"
+    },
+    {
+      "id": "2",
+      "text": "Завершить предыдущую задачу",
+      "description": "",
+      "status": "InProgress"
+    },
+    {
+      "id": "3",
+      "text": "Создать мой первый Angular-проект",
+      "description": "description third",
+      "status": "InProgress"
+    }
+  ]
+}

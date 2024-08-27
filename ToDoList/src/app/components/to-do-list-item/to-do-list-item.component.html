@@ -5,15 +5,19 @@
             <mat-label>Изменить</mat-label>
             <input matInput type="text" [(ngModel)]="listItem.text">
         </mat-form-field>
-        <app-button class="button button-add" title="Сохранить" (click)="editItem()" 
-            [appTooltip]="'Применить изменения'">
+        <app-button class="button button-add" (click)="editItem()" 
+                    [appTooltip]="'Применить изменения'">
+            Сохранить
         </app-button>
     </div>
 </ng-template>
 <ng-template #viewBlock>
+    <mat-checkbox [checked]="listItem.status === statusList.Complete"
+    (change)="statusChange($event)" />
     <input type="text" [value]="listItem.text" [readonly]="!isEdit" (dblclick)="isEdit=true">     
-    <app-button class="button button-delete" title="Удалить" (click)="deleteItem()" 
-        [appTooltip]="'Удалить из списка дел'">
+    <app-button class="button button-delete" (click)="deleteItem()" 
+                [appTooltip]="'Удалить из списка дел'">
+        Удалить
     </app-button>
 </ng-template>
 

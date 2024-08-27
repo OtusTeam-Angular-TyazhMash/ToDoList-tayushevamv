@@ -1,15 +1,26 @@
 <h1>ToDO List</h1>
 <ng-container *ngIf="isLoading === true; then loading; else notloading" />
+
   <ng-template #loading>
-    <mat-spinner [diameter]="50"></mat-spinner>
+    <app-loading-spinner />
   </ng-template>
   <ng-template #notloading>
+    <div class="list-panel">
+      <mat-form-field>
+        <mat-select placeholder="Статус" value=null (selectionChange)="onFilter($event)">
+          <mat-option *ngFor="let item of statusList" [value]="item.key">
+            {{ item.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="list-block">
       <ul>
-        <li *ngFor="let elem of getList()" (click)="onClickItem(elem.id)">
+        <li *ngFor="let elem of listItems" (click)="onClickItem(elem.id)">
           <app-to-do-list-item [listItem]="elem" 
                                 (deleteItemEvent)="deleteItem($event)" 
                                 (editItemEvent)="editItem($event)" 
+                                (editItemStatusEvent)="editItemStatus(elem, $event)"
                                 [class.selected]="elem.id === selectedItemId"
                                 [appTooltip]="'Нажми чтобы посмотреть описание'">
           </app-to-do-list-item>
@@ -23,15 +34,6 @@
       </div>
     </div>
     <div>
-      <mat-form-field>
-        <mat-label>Новая задача</mat-label>
-        <input matInput type="text" [(ngModel)]="newValue">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Описание</mat-label>
-        <input matInput type="text" [(ngModel)]="newDescription">
-      </mat-form-field>  
-      <app-button class="button button-add" title="Добавить" [disabled]="!newValue" (click)="addItem()" 
-                  [appTooltip]="'Добавить в список дел'"/>  
+      <app-to-do-create-item (addItemEvent)="addItem($event)"/>
     </div>
   </ng-template>
