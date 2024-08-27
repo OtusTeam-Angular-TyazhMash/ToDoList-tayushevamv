@@ -13,6 +13,8 @@ import { SharedModule } from './shared/shared.module';
 import { ToastComponent } from './shared/toast/toast.component';
 import { CreateItemComponent } from './components/to-do-create-item/to-do-create-item.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ToDoItemViewComponent } from './components/to-do-item-view/to-do-item-view.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     ToDoListItemComponent,
     ToastComponent,
     CreateItemComponent,
+    ToDoItemViewComponent,    
   ],
   imports: [
     BrowserModule,
@@ -32,7 +35,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatCheckboxModule,
     SharedModule,
     ReactiveFormsModule,
-    HttpClientModule        
+    HttpClientModule,
+    AppRoutingModule        
   ],
   providers: [],
   bootstrap: [AppComponent]

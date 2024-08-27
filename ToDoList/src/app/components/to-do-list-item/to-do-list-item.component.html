@@ -15,7 +15,7 @@
     <mat-checkbox [checked]="listItem.status === statusList.Complete"
     (change)="statusChange($event)" />
     <input type="text" [value]="listItem.text" [readonly]="!isEdit" (dblclick)="isEdit=true">     
-    <app-button class="button button-delete" (click)="deleteItem()" 
+    <app-button class="button button-delete" (click)="deleteItem(); $event.stopPropagation()" 
                 [appTooltip]="'Удалить из списка дел'">
         Удалить
     </app-button>
