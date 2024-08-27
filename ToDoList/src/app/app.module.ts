@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SharedModule } from './shared/shared.module';
-import { ToastComponent } from './shared/toast/toast.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
 
 @NgModule({
   declarations: [
