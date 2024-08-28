@@ -1,14 +1,13 @@
 <h1>ToDO List</h1>
 
-<!-- Разметка обязательно должна содержать:
-Разметку списка задач тегами Ul > LI
-Каждый элемент списка содержит кнопку Delete (для будущего действия удаления элемента списка)
-После списка имеется Input элемент и кнопка Add (для будущего добавления нового элемента в список) -->
 <ul>
-    <li>By a new gaming laptop <button>Удалить</button></li>
-    <li>Complete previous task <button>Удалить</button></li>
-    <li>Create some angular app <button>Удалить</button></li>
+    <li *ngFor="let elem of elements">
+      <app-to-do-list-item [listItem]="elem" (deleteItemEvent)="deleteItem($event)"></app-to-do-list-item>
+    </li>
 </ul>
 
-<input type="text" size="40" placeholder="Введите новый элемент">
-<input class="styled" type="button" name="add" value="Добавить задачу"/>
+<mat-form-field>
+    <mat-label>Новая задача</mat-label>
+    <input matInput type="text" [(ngModel)]="newValue">
+</mat-form-field>
+<button class="button button-add" [disabled]="!newValue" (click)="addItem()">Добавить</button>    
