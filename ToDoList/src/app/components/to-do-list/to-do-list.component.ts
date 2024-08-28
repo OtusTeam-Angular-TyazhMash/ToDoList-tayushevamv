@@ -1,6 +1,7 @@
-import { compileDeclareInjectableFromMetadata } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { IListItem } from 'src/app/models/to-do-list.model';
+import { ServiceService } from 'src/app/services/service.service';
+import { EToastType, ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-to-do-list',
@@ -9,28 +10,33 @@ import { IListItem } from 'src/app/models/to-do-list.model';
 })
 export class ToDoListComponent implements OnInit{
 
+  constructor(private service: ServiceService,
+              private toastService: ToastService
+  ) {}
+
   isLoading: boolean = true;
   newValue: string = '';
   newDescription: string = '';
-  elements: Array<IListItem> = [ {id: 1, text: 'By a new gaming laptop', description: 'description first'}, 
-                                  {id: 2, text: 'Complete previous task', description: ''}, 
-                                  {id: 3, text: 'Create some angular app', description: 'description third'}
-                                ];
-  selectedItemId!: number;
+  selectedItemId!: number|null;
 
   addItem() : void {
-    if (this.newValue) {
-      let newId: number = Math.max(...this.elements.map((element)=> element.id))+1;
-      this.elements.push(
-              {id: newId, text: this.newValue, description: this.newDescription}
-          );
-    }
+    this.service.addItem(this.newValue, this.newDescription);
+    this.toastService.showToast(EToastType.success, "Задача добавлена");
   }
 
   deleteItem(id: number): void {
-    const index: number = this.elements.findIndex(item => item.id === id);
-    if (index >= 0)
-        this.elements.splice(index, 1);
+    this.service.deleteItem(id);
+    this.selectedItemId = null;
+    this.toastService.showToast(EToastType.success, "Задача удалена");
+  }
+
+  editItem(item: IListItem) {
+    this.service.editItem(item.id, item.text);
+    this.toastService.showToast(EToastType.success, "Внесены изменения");
+  }
+
+  getList(): IListItem[] {
+    return this.service.getItems;
   }
 
   ngOnInit(): void {
@@ -43,12 +49,8 @@ export class ToDoListComponent implements OnInit{
     this.selectedItemId = id;
   }
 
-  getDescription(): string {
-    const index: number = this.elements.findIndex(item => item.id === this.selectedItemId);
-    if (index >= 0)
-      return this.elements[index].description;
-    else
-      return '';
+  getDescription(): string {   
+    return this.service.getItem(this.selectedItemId!)!.description;
   }
 
 }

@@ -9,9 +9,17 @@ import { IListItem } from 'src/app/models/to-do-list.model';
 export class ToDoListItemComponent {
   @Input() listItem!: IListItem;
   @Output() deleteItemEvent = new EventEmitter<number>();
+  @Output() editItemEvent = new EventEmitter<IListItem>();
+
+  isEdit: boolean = false;
 
   deleteItem(): void {
     this.deleteItemEvent.emit(this.listItem.id);
+  }
+
+  editItem(): void {
+    this.editItemEvent.emit(this.listItem);
+    this.isEdit = false;
   }
 
 }

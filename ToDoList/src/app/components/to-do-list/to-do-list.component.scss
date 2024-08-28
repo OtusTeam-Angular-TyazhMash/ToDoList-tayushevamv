@@ -19,10 +19,12 @@ input{
     border-radius: 5px; 
     border-width: 1px;   
     min-height: 30px; 
-    min-width: 300px; 
+    min-width: 500px; 
+    width: 100%;    
 }
 
 mat-form-field{
+    min-width: 500px;        
     padding: 5px;
 }
 
