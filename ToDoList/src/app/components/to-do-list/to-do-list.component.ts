@@ -1,3 +1,4 @@
+import { compileDeclareInjectableFromMetadata } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { IListItem } from 'src/app/models/to-do-list.model';
 
@@ -10,16 +11,18 @@ export class ToDoListComponent implements OnInit{
 
   isLoading: boolean = true;
   newValue: string = '';
-  elements: Array<IListItem> = [ {id: 1, text: 'By a new gaming laptop'}, 
-                                  {id: 2, text: 'Complete previous task'}, 
-                                  {id: 3, text: 'Create some angular app'}
+  newDescription: string = '';
+  elements: Array<IListItem> = [ {id: 1, text: 'By a new gaming laptop', description: 'description first'}, 
+                                  {id: 2, text: 'Complete previous task', description: ''}, 
+                                  {id: 3, text: 'Create some angular app', description: 'description third'}
                                 ];
+  selectedItemId!: number;
 
   addItem() : void {
     if (this.newValue) {
       let newId: number = Math.max(...this.elements.map((element)=> element.id))+1;
       this.elements.push(
-              {id: newId, text: this.newValue}
+              {id: newId, text: this.newValue, description: this.newDescription}
           );
     }
   }
@@ -34,6 +37,18 @@ export class ToDoListComponent implements OnInit{
     setTimeout(
         () => this.isLoading = false, 500
       );
+  }
+
+  onClickItem(id: number): void {
+    this.selectedItemId = id;
+  }
+
+  getDescription(): string {
+    const index: number = this.elements.findIndex(item => item.id === this.selectedItemId);
+    if (index >= 0)
+      return this.elements[index].description;
+    else
+      return '';
   }
 
 }
