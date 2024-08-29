@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
 import { IListItem, ICreateItem, EStatus, ISelectListItem } from 'src/app/models/to-do-list.model';
-import { ServiceService } from 'src/app/services/service.service';
+import { ToDoServiceService } from 'src/app/services/to-do-service.service';
 import { EToastType, ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { EToastType, ToastService } from 'src/app/shared/services/toast.service'
 })
 export class ToDoListComponent implements OnInit{
 
-  constructor(private service: ServiceService,
+  constructor(private service: ToDoServiceService,
               private toastService: ToastService,
               private activatedRoute: ActivatedRoute
   ) {}

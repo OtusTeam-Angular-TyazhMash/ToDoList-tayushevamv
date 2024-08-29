@@ -6,40 +6,38 @@ import { IListItem, EStatus } from '../models/to-do-list.model';
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceService {
-
-    private url = "http://localhost:3000/to-do-list";
+export class ToDoServiceService {
 
     constructor(private httpClient: HttpClient) { }
 
     getItems(): Observable<Array<IListItem>> {
-      return this.httpClient.get<Array<IListItem>>(this.url);
+      return this.httpClient.get<Array<IListItem>>("http://localhost:3000/to-do-list");
     }
 
     getFilterItems(status: EStatus): Observable<Array<IListItem>> {
-      return this.httpClient.get<Array<IListItem>>(this.url + "?status=" + status);
+      return this.httpClient.get<Array<IListItem>>(`http://localhost:3000/to-do-list?status=${status}`);
     }
 
     getItem(id: number): Observable<IListItem> {
-      return this.httpClient.get<IListItem>(this.url+ "/" + id);
+      return this.httpClient.get<IListItem>(`http://localhost:3000/to-do-list/${id}`);
     }
 
   addItem(text: string, description: string): Observable<IListItem> {
-    return this.httpClient.post<IListItem>(this.url, 
+    return this.httpClient.post<IListItem>("http://localhost:3000/to-do-list", 
               {text: text, description: description, status: EStatus.InProgress}
           );
   }
 
   deleteItem(id: number): Observable<void> {
-    return this.httpClient.delete<void>(this.url + "/" + id);
+    return this.httpClient.delete<void>(`http://localhost:3000/to-do-list/${id}`);
   }
 
   editItem(id: number, text: string): Observable<IListItem> {
-    return this.httpClient.patch<IListItem>(this.url + "/" + id, { text: text });
+    return this.httpClient.patch<IListItem>(`http://localhost:3000/to-do-list/${id}`, { text: text });
   }
 
   editItemStatus(id: number, status: EStatus): Observable<IListItem> {
-    return this.httpClient.patch<IListItem>(this.url + "/" + id, { status: status.valueOf });
+    return this.httpClient.patch<IListItem>(`http://localhost:3000/to-do-list/${id}`, { status: status });
   }
 
 }
