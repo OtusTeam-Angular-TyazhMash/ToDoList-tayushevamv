@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IListItem } from 'src/app/models/to-do-list.model';
+import { MatSelectChange } from '@angular/material/select';
+import { IListItem, ICreateItem, EStatus, ISelectListItem } from 'src/app/models/to-do-list.model';
 import { ServiceService } from 'src/app/services/service.service';
 import { EToastType, ToastService } from 'src/app/shared/services/toast.service';
 
@@ -15,29 +16,91 @@ export class ToDoListComponent implements OnInit{
   ) {}
 
   isLoading: boolean = true;
+  listItems: Array<IListItem> = [];
   newValue: string = '';
   newDescription: string = '';
   selectedItemId!: number|null;
+  readonly statusList: ISelectListItem[] = [
+          {key: null, value: 'All'},
+          {key: EStatus.InProgress, value: EStatus.InProgress},
+          {key: EStatus.Complete, value: EStatus.Complete}
+        ];
 
-  addItem() : void {
-    this.service.addItem(this.newValue, this.newDescription);
-    this.toastService.showToast(EToastType.success, "Задача добавлена");
+  addItem(item: ICreateItem) : void {
+    this.service.addItem(item.text, item.description).subscribe({
+        next: (res) => {
+            this.listItems.push(res);
+            this.toastService.showToast(EToastType.success, "Задача добавлена");
+        },
+        error: () => {
+          this.toastService.showToast(EToastType.error, 'Не удалось сохранить');
+        },
+    });
   }
 
   deleteItem(id: number): void {
-    this.service.deleteItem(id);
-    this.selectedItemId = null;
-    this.toastService.showToast(EToastType.success, "Задача удалена");
+      this.service.deleteItem(id).subscribe({
+          next: () => {
+              const index = this.listItems.findIndex(item => item.id === id);
+              if (index > -1)
+                  this.listItems.splice(index, 1);
+              if (id === this.selectedItemId)
+                  this.selectedItemId = null;
+              this.toastService.showToast(EToastType.success, "Задача удалена");
+          },
+          error: () => {
+            this.toastService.showToast(EToastType.error, 'Не удалось сохранить');
+          },
+      });
   }
 
-  editItem(item: IListItem) {
-    this.service.editItem(item.id, item.text);
-    this.toastService.showToast(EToastType.success, "Внесены изменения");
+  editItem(item: IListItem): void {
+      this.service.editItem(item.id, item.text).subscribe({
+          next: (res) => {
+              const index = this.listItems.findIndex(findItem => findItem.id === res.id);
+              this.listItems[index] = res;
+              this.toastService.showToast(EToastType.success, "Внесены изменения");
+          },
+          error: () => {
+            this.toastService.showToast(EToastType.error, 'Не удалось сохранить');
+          },
+      });
+  }
+   
+  editItemStatus(item: IListItem, status: EStatus): void {
+    this.service.editItemStatus(item.id, status).subscribe({
+        next: (res) => {
+            const index = this.listItems.findIndex(findItem => findItem.id === res.id);
+            this.listItems[index] = res;
+            this.toastService.showToast(EToastType.success, "Внесены изменения");
+        },
+        error: () => {
+          this.toastService.showToast(EToastType.error, 'Не удалось сохранить');
+        },
+    });
   }
 
-  getList(): IListItem[] {
-    return this.service.getItems;
-  }
+  getList(): void {
+    this.service.getItems().subscribe({
+      next: (res) => {
+        this.listItems = res;
+      },
+      error: () => {
+        this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');
+      },
+    })
+  };  
+
+  getFilterList(status: EStatus): void {
+    this.service.getFilterItems(status).subscribe({
+      next: (res) => {
+        this.listItems = res;
+      },
+      error: () => {
+        this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');
+      },
+    })
+  };
 
   ngOnInit(): void {
     setTimeout(
@@ -49,8 +112,24 @@ export class ToDoListComponent implements OnInit{
     this.selectedItemId = id;
   }
 
-  getDescription(): string {   
-    return this.service.getItem(this.selectedItemId!)!.description;
+  getDescription(): string { 
+    let result ='';  
+    this.service.getItem(this.selectedItemId!).subscribe({
+      next: (res) => {
+        result = res.description;
+      },
+      error: () => {
+        this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');        
+      },
+    });
+    return result;          
+  }
+
+  onFilter(status: MatSelectChange): void {
+    if (status.value === null)
+        this.getList()
+    else
+        this.getFilterList(status.value)
   }
 
 }

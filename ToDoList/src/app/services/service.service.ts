@@ -1,57 +1,45 @@
 import { Injectable } from '@angular/core';
-import { IListItem } from '../models/to-do-list.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { IListItem, EStatus } from '../models/to-do-list.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceService {
 
-  private elements: Array<IListItem> = [ 
-      {id: 1, text: 'Купить новый игровой ПК', description: 'description first'}, 
-      {id: 2, text: 'Завершить предыдущую задачу', description: ''}, 
-      {id: 3, text: 'Создать мой первый Angular-проект', description: 'description third'}
-  ];
+    private url = "http://localhost:3000/to-do-list";
 
-  get getItems() {
-      return this.elements;
-  }
+    constructor(private httpClient: HttpClient) { }
 
-  getItem(id: number): IListItem|null {
-    const index: number = this.elements.findIndex(item => item.id === id);
-    if (index >= 0)
-      return this.elements[index];
-    else
-      return null;
-  }
-
-  addItem(text: string, description: string): boolean {
-    if (text) {
-      let newId: number = Math.max(...this.elements.map((element)=> element.id))+1;
-      this.elements.push(
-              {id: newId, text: text, description: description}
-          );
-      return true;
+    getItems(): Observable<Array<IListItem>> {
+      return this.httpClient.get<Array<IListItem>>(this.url);
     }
-    else  
-      return false;
+
+    getFilterItems(status: EStatus): Observable<Array<IListItem>> {
+      return this.httpClient.get<Array<IListItem>>(this.url + "?status=" + status);
+    }
+
+    getItem(id: number): Observable<IListItem> {
+      return this.httpClient.get<IListItem>(this.url+ "?id=" + id);
+    }
+
+  addItem(text: string, description: string): Observable<IListItem> {
+    return this.httpClient.post<IListItem>(this.url, 
+              {text: text, description: description, status: EStatus.InProgress}
+          );
   }
 
-  deleteItem(id: number): boolean {
-    const index: number = this.elements.findIndex(item => item.id === id);
-    if (index >= 0) {
-        this.elements.splice(index, 1);
-        return true;
-    } else 
-      return false;
+  deleteItem(id: number): Observable<void> {
+    return this.httpClient.delete<void>(this.url + "/" + id);
   }
 
-  editItem(id: number, text: string): boolean {
-      const itemIndex = this.elements.findIndex(item => item.id === id);
-      if (itemIndex > -1) {
-          this.elements[itemIndex].text = text;
-          return true;
-      } else
-          return false;
+  editItem(id: number, text: string): Observable<IListItem> {
+    return this.httpClient.patch<IListItem>(this.url + "/" + id, { text: text });
+  }
+
+  editItemStatus(id: number, status: EStatus): Observable<IListItem> {
+    return this.httpClient.patch<IListItem>(this.url + "/" + id, { status: status.valueOf });
   }
 
 }

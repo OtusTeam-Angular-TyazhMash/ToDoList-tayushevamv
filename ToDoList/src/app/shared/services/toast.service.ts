@@ -1,7 +1,7 @@
 import { ApplicationRef, ComponentRef, EmbeddedViewRef, Injectable, createComponent } from '@angular/core';
 import { ToastComponent } from '../components/toast/toast.component';
 
-export enum EToastType {
+export const enum EToastType {
   info = "Сообщение",
   error= "Ошибка",
   warning= "Предупреждение",

@@ -1,0 +1,14 @@
+<form [formGroup]="itemForm">
+    <mat-form-field>
+        <mat-label>Новая задача</mat-label>
+        <input matInput type="text" formControlName="title">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Описание</mat-label>
+        <input matInput type="text" formControlName="description">
+      </mat-form-field>  
+      <app-button class="button button-add" [disabled]="!itemForm.valid" (click)="addItem()" 
+                  [appTooltip]="'Добавить в список дел'">
+         Добавить
+      </app-button>  
+</form>
