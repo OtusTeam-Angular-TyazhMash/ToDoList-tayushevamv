@@ -10,11 +10,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule} from '@angular/material/select';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { SharedModule } from './shared/shared.module';
-import { ToastComponent } from './shared/toast/toast.component';
 import { CreateItemComponent } from './components/to-do-create-item/to-do-create-item.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ToDoItemViewComponent } from './components/to-do-item-view/to-do-item-view.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ToastComponent } from './shared/components/toast/toast.component';
 
 @NgModule({
   declarations: [
