@@ -16,21 +16,17 @@
     </div>
     <div class="list-block">
       <ul>
-        <li *ngFor="let elem of listItems" (click)="onClickItem(elem.id)">
-          <app-to-do-list-item [listItem]="elem" 
-                                (deleteItemEvent)="deleteItem($event)" 
-                                (editItemEvent)="editItem($event)" 
-                                (editItemStatusEvent)="editItemStatus(elem, $event)"
-                                [class.selected]="elem.id === selectedItemId"
-                                [appTooltip]="'Нажми чтобы посмотреть описание'">
-          </app-to-do-list-item>
+        <li *ngFor="let elem of listItems" routerLinkActive="selected" [routerLink]="[elem.id]" tabindex="0">
+                      <app-to-do-list-item [listItem]="elem" 
+                                            (deleteItemEvent)="deleteItem($event)" 
+                                            (editItemEvent)="editItem($event)" 
+                                            (editItemStatusEvent)="editItemStatus(elem, $event)"
+                                            [appTooltip]="'Нажми чтобы посмотреть описание'">
+                      </app-to-do-list-item>
         </li>
       </ul>
-      <div class="description-block">
-        <h4>Описание</h4>
-        <ng-container *ngIf="selectedItemId!=null">
-           <h5>{{getDescription()}}</h5>
-        </ng-container>
+      <div class="description-block" *ngIf="getItemIdFromRoute !== null">
+        <router-outlet></router-outlet>
       </div>
     </div>
     <div>

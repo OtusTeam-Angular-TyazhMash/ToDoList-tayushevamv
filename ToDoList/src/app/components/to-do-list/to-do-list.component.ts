@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
+import { ActivatedRoute } from '@angular/router';
 import { IListItem, ICreateItem, EStatus, ISelectListItem } from 'src/app/models/to-do-list.model';
 import { ServiceService } from 'src/app/services/service.service';
 import { EToastType, ToastService } from 'src/app/shared/services/toast.service';
@@ -12,19 +13,24 @@ import { EToastType, ToastService } from 'src/app/shared/services/toast.service'
 export class ToDoListComponent implements OnInit{
 
   constructor(private service: ServiceService,
-              private toastService: ToastService
+              private toastService: ToastService,
+              private activatedRoute: ActivatedRoute
   ) {}
 
   isLoading: boolean = true;
   listItems: Array<IListItem> = [];
   newValue: string = '';
   newDescription: string = '';
-  selectedItemId!: number|null;
   readonly statusList: ISelectListItem[] = [
           {key: null, value: 'All'},
           {key: EStatus.InProgress, value: EStatus.InProgress},
           {key: EStatus.Complete, value: EStatus.Complete}
         ];
+
+  public get getItemIdFromRoute(): number | null {
+      return this.activatedRoute.snapshot.children.length === 0 ?
+          null : +this.activatedRoute.snapshot.children[0].params['id'];
+  }
 
   addItem(item: ICreateItem) : void {
     this.service.addItem(item.text, item.description).subscribe({
@@ -44,8 +50,6 @@ export class ToDoListComponent implements OnInit{
               const index = this.listItems.findIndex(item => item.id === id);
               if (index > -1)
                   this.listItems.splice(index, 1);
-              if (id === this.selectedItemId)
-                  this.selectedItemId = null;
               this.toastService.showToast(EToastType.success, "Задача удалена");
           },
           error: () => {
@@ -106,23 +110,6 @@ export class ToDoListComponent implements OnInit{
     setTimeout(
         () => this.isLoading = false, 500
       );
-  }
-
-  onClickItem(id: number): void {
-    this.selectedItemId = id;
-  }
-
-  getDescription(): string { 
-    let result ='';  
-    this.service.getItem(this.selectedItemId!).subscribe({
-      next: (res) => {
-        result = res.description;
-      },
-      error: () => {
-        this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');        
-      },
-    });
-    return result;          
   }
 
   onFilter(status: MatSelectChange): void {

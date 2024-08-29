@@ -24,7 +24,7 @@ export class CreateItemComponent implements OnInit{
     this.addItemEvent.emit(
       { 
         text: this.itemForm.controls['title'].value,
-        description: this.itemForm.controls['title'].value
+        description: this.itemForm.controls['description'].value
       }
     );
   }

@@ -21,7 +21,7 @@ export class ServiceService {
     }
 
     getItem(id: number): Observable<IListItem> {
-      return this.httpClient.get<IListItem>(this.url+ "?id=" + id);
+      return this.httpClient.get<IListItem>(this.url+ "/" + id);
     }
 
   addItem(text: string, description: string): Observable<IListItem> {
