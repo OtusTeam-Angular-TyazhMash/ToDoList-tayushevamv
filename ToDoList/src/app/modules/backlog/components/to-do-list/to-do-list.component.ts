@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
-import { tap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { IListItem, ICreateItem, EStatus, ISelectListItem } from 'src/app/models/to-do-list.model';
-import { ToDoService } from 'src/app/services/to-do.service';
-import { EToastType, ToastService } from 'src/app/shared/services/toast.service';
+import { ToDoDataService } from 'src/app/services/to-do-data.service';
 
 @Component({
   selector: 'app-to-do-list',
@@ -13,13 +12,12 @@ import { EToastType, ToastService } from 'src/app/shared/services/toast.service'
 })
 export class ToDoListComponent implements OnInit{
 
-  constructor(private service: ToDoService,
-              private toastService: ToastService,
+  constructor(private dataService: ToDoDataService,
               private activatedRoute: ActivatedRoute
   ) {}
 
   isLoading: boolean = false;
-  listItems: Array<IListItem> = [];
+  listItems$!: Observable<Array<IListItem>>;
   newValue: string = '';
   newDescription: string = '';
   readonly statusList: ISelectListItem[] = [
@@ -34,94 +32,33 @@ export class ToDoListComponent implements OnInit{
   }
 
   addItem(item: ICreateItem) : void {
-    this.service.addItem(item.text, item.description).subscribe({
-        next: (res) => {
-            this.listItems.push(res);
-            this.toastService.showToast(EToastType.success, "Задача добавлена");
-        },
-        error: () => {
-          this.toastService.showToast(EToastType.error, 'Не удалось сохранить');
-        },
-    });
+    this.dataService.addItem(item);
   }
 
   deleteItem(id: number): void {
-      this.service.deleteItem(id).subscribe({
-          next: () => {
-              const index = this.listItems.findIndex(item => item.id === id);
-              if (index > -1)
-                  this.listItems.splice(index, 1);
-              this.toastService.showToast(EToastType.success, "Задача удалена");
-          },
-          error: () => {
-            this.toastService.showToast(EToastType.error, 'Не удалось сохранить');
-          },
-      });
+      this.dataService.deleteItem(id);
   }
 
   editItem(item: IListItem): void {
-      this.service.editItem(item.id, item.text).subscribe({
-          next: (res) => {
-              const index = this.listItems.findIndex(findItem => findItem.id === res.id);
-              this.listItems[index] = res;
-              this.toastService.showToast(EToastType.success, "Внесены изменения");
-          },
-          error: () => {
-            this.toastService.showToast(EToastType.error, 'Не удалось сохранить');
-          },
-      });
+      this.dataService.editItem(item.id, item.text);
   }
    
   editItemStatus(item: IListItem, status: EStatus): void {
-    this.service.editItemStatus(item.id, status).subscribe({
-        next: (res) => {
-            const index = this.listItems.findIndex(findItem => findItem.id === res.id);
-            this.listItems[index] = res;
-            this.toastService.showToast(EToastType.success, "Внесены изменения");
-        },
-        error: () => {
-          this.toastService.showToast(EToastType.error, 'Не удалось сохранить');
-        },
-    });
+    this.dataService.editItemStatus(item.id, status);
   }
 
-  getList(): void {
-    this.service.getItems()
-      .pipe( tap( () => this.isLoading = true))
-          .subscribe({
-            next: (res) => {
-              this.listItems = res;
-            },
-            error: () => {
-              this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');
-            },
-            complete: () => this.isLoading = false
-          })
-  };  
-
-  getFilterList(status: EStatus): void {
-    this.service.getFilterItems(status)
-      .pipe( tap( () => this.isLoading = true))
-        .subscribe({
-          next: (res) => {
-            this.listItems = res;
-          },
-          error: () => {
-            this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');
-          },
-          complete: () => this.isLoading = false
-        })
-  };
-
   ngOnInit(): void {
-    this.getList();
+    this.listItems$ = this.dataService.getItems;
+    this.dataService.returnList();
   }
 
   onFilter(status: MatSelectChange): void {
     if (status.value === null)
-        this.getList()
+        this.dataService.getItems
     else
-        this.getFilterList(status.value)
+        this.dataService.getItems.pipe(
+          map(items => items.filter(item => item.status === status.value))
+        )
   }
 
 }
