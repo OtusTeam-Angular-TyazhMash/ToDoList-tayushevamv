@@ -3,11 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ICreateItem } from 'src/app/models/to-do-list.model';
 
 @Component({
-  selector: 'app-to-do-create-item',
-  templateUrl: './to-do-create-item.component.html',
-  styleUrls: ['./to-do-create-item.component.scss']
+  selector: 'app-to-do-item-create',
+  templateUrl: './to-do-item-create.component.html',
+  styleUrls: ['./to-do-item-create.component.scss']
 })
-export class CreateItemComponent implements OnInit{
+export class ToDoItemCreateComponent implements OnInit{
   itemForm!: FormGroup;
   @Output() addItemEvent = new EventEmitter<ICreateItem>();
 

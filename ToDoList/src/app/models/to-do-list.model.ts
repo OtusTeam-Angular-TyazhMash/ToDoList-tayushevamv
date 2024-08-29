@@ -1,6 +1,6 @@
 export enum EStatus {
-  InProgress = "InProgress",
-  Complete = "Complete"
+  InProgress = "In Progress",
+  Complete = "Completed"
 }
 export interface IListItem {
     id: number, 

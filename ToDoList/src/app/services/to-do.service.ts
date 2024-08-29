@@ -6,7 +6,7 @@ import { IListItem, EStatus } from '../models/to-do-list.model';
 @Injectable({
   providedIn: 'root'
 })
-export class ToDoServiceService {
+export class ToDoService {
 
     constructor(private httpClient: HttpClient) { }
 

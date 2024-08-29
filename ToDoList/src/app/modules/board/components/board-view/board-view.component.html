@@ -1,0 +1,12 @@
+<div class="board-column">
+    <div class="header">All ({{listItems.length}})</div>
+    <app-board-item-view *ngFor="let item of listItems" [title]="item.text" />
+</div>
+<div class="board-column">
+    <div class="header">{{status.InProgress}} ({{inProgressToDoListItems.length}})</div>
+    <app-board-item-view *ngFor="let item of inProgressToDoListItems" [title]="item.text" class="warning" />
+</div>
+<div class="board-column">
+    <div class="header">{{status.Complete}} ({{completedToDoListItems.length}})</div>
+    <app-board-item-view *ngFor="let item of completedToDoListItems" [title]="item.text" class="success" />
+</div>

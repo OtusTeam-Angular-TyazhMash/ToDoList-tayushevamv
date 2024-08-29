@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { ToDoServiceService } from 'src/app/services/to-do-service.service';
+import { ToDoService } from 'src/app/services/to-do.service';
 import { EToastType, ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class ToDoItemViewComponent {
 
   constructor(private activatedRoute: ActivatedRoute,
       private toastService: ToastService,
-      private service: ToDoServiceService) { }
+      private service: ToDoService) { }
 
   ngOnDestroy(): void {
       this.componentDestroyed$.next(true);
