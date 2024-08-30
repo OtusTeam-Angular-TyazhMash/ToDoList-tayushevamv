@@ -1,1 +1,14 @@
-<router-outlet></router-outlet>
+<div class="side-nav">
+    <h1 class="header">TasksBoard</h1>
+    <div class="navigation">
+        <a mat-button [routerLink]="'/backlog'" routerLinkActive="selected" [appTooltip]="'Navigate to Backlog'">
+            Backlog
+        </a>
+        <a mat-button [routerLink]="'/board'" routerLinkActive="selected" [appTooltip]="'Navigate to Board'">
+            Board
+        </a>
+    </div>
+</div>
+<div class="content">
+    <router-outlet></router-outlet>
+</div>

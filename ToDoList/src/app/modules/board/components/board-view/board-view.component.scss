@@ -1,0 +1,21 @@
+:host {
+    display: flex;
+}
+
+.header {
+    flex: 0;
+}
+
+.board-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.success {
+    background-color: lightgreen;
+}
+
+.warning {
+    background-color: lightsalmon;
+}

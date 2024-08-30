@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
+import { tap } from 'rxjs';
 import { IListItem, ICreateItem, EStatus, ISelectListItem } from 'src/app/models/to-do-list.model';
-import { ServiceService } from 'src/app/services/service.service';
+import { ToDoService } from 'src/app/services/to-do.service';
 import { EToastType, ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
@@ -12,12 +13,12 @@ import { EToastType, ToastService } from 'src/app/shared/services/toast.service'
 })
 export class ToDoListComponent implements OnInit{
 
-  constructor(private service: ServiceService,
+  constructor(private service: ToDoService,
               private toastService: ToastService,
               private activatedRoute: ActivatedRoute
   ) {}
 
-  isLoading: boolean = true;
+  isLoading: boolean = false;
   listItems: Array<IListItem> = [];
   newValue: string = '';
   newDescription: string = '';
@@ -85,31 +86,35 @@ export class ToDoListComponent implements OnInit{
   }
 
   getList(): void {
-    this.service.getItems().subscribe({
-      next: (res) => {
-        this.listItems = res;
-      },
-      error: () => {
-        this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');
-      },
-    })
+    this.service.getItems()
+      .pipe( tap( () => this.isLoading = true))
+          .subscribe({
+            next: (res) => {
+              this.listItems = res;
+            },
+            error: () => {
+              this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');
+            },
+            complete: () => this.isLoading = false
+          })
   };  
 
   getFilterList(status: EStatus): void {
-    this.service.getFilterItems(status).subscribe({
-      next: (res) => {
-        this.listItems = res;
-      },
-      error: () => {
-        this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');
-      },
-    })
+    this.service.getFilterItems(status)
+      .pipe( tap( () => this.isLoading = true))
+        .subscribe({
+          next: (res) => {
+            this.listItems = res;
+          },
+          error: () => {
+            this.toastService.showToast(EToastType.error, 'Не удалось загрузить данные');
+          },
+          complete: () => this.isLoading = false
+        })
   };
 
   ngOnInit(): void {
-    setTimeout(
-        () => this.isLoading = false, 500
-      );
+    this.getList();
   }
 
   onFilter(status: MatSelectChange): void {
