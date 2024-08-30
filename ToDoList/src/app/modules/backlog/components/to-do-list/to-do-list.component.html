@@ -15,19 +15,21 @@
       </mat-form-field>
     </div>
     <div class="list-block">
-      <ul>
-        <li *ngFor="let elem of listItems" routerLinkActive="selected" [routerLink]="[elem.id]" tabindex="0">
-                      <app-to-do-list-item [listItem]="elem" 
-                                            (deleteItemEvent)="deleteItem($event)" 
-                                            (editItemEvent)="editItem($event)" 
-                                            (editItemStatusEvent)="editItemStatus(elem, $event)"
-                                            [appTooltip]="'Нажми чтобы посмотреть описание'">
-                      </app-to-do-list-item>
-        </li>
-      </ul>
-      <div class="description-block" *ngIf="getItemIdFromRoute !== null">
-        <router-outlet></router-outlet>
-      </div>
+      <ng-container *ngIf="(listItems$ | async) as list">
+          <ul>
+            <li *ngFor="let elem of list" routerLinkActive="selected" [routerLink]="[elem.id]" tabindex="0">
+                          <app-to-do-list-item [listItem]="elem" 
+                                                (deleteItemEvent)="deleteItem($event)" 
+                                                (editItemEvent)="editItem($event)" 
+                                                (editItemStatusEvent)="editItemStatus(elem, $event)"
+                                                [appTooltip]="'Нажми чтобы посмотреть описание'">
+                          </app-to-do-list-item>
+            </li>
+          </ul>
+          <div class="description-block" *ngIf="getItemIdFromRoute !== null">
+            <router-outlet></router-outlet>
+          </div>
+      </ng-container>
     </div>
     <div>
       <app-to-do-item-create (addItemEvent)="addItem($event)"/>

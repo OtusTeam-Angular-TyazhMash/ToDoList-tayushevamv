@@ -1,4 +1,5 @@
 import { ApplicationRef, ComponentRef, EmbeddedViewRef, Injectable, createComponent } from '@angular/core';
+import { BehaviorSubject, delay, map, take } from 'rxjs';
 import { ToastComponent } from '../components/toast/toast.component';
 
 export const enum EToastType {
@@ -19,9 +20,15 @@ export interface IToast {
 
 export class ToastService {
   private componentRef: ComponentRef<ToastComponent> | null = null;
-  toastList: Array<IToast> = [];
+  private toastList$: BehaviorSubject<Array<IToast>> = new BehaviorSubject<Array<IToast>>([]);
 
   constructor(private applicationRef: ApplicationRef) { }
+
+  get getToastList() {
+    return this.toastList$.asObservable().pipe(
+        map(items => items),
+    );
+  }
 
   private createToastComponent(): void {
     if (this.componentRef === null) {
@@ -43,39 +50,35 @@ export class ToastService {
       }
   }
 
-  private addToast(type: EToastType, text: string): number|null {
+  private addToast(type: EToastType, text: string): IToast|null {
     if (text && type) {
-      let newId: number = Math.max(...this.toastList.map((element)=> element.id))+1;
-      this.toastList.push(
-              {id: newId, text: text, type: type}
-          );
-      return newId;
+      let newId: number = Math.max(...this.toastList$.value.map((element)=> element.id))+1;
+      let toast: IToast = {id: newId, text: text, type: type};
+      return toast;
     }
     else
       return null;
   }
 
   private deleteToast(id: number): void {
-    const toastIndex = this.toastList.findIndex(findItem => findItem.id === id);
+    const toastIndex = this.toastList$.value.findIndex(findItem => findItem.id === id);
     if (toastIndex > -1)
-        this.toastList.splice(toastIndex, 1);
-  }
-  
-  getToastList(): Array<IToast>  {
-    return this.toastList;
+        this.toastList$.value.splice(toastIndex, 1);
   }
 
   showToast(type: EToastType, text: string, duration: number = 3000) {
-    let id = this.addToast(type, text);
-    if (id!) {
+    let toast = this.addToast(type, text);
+    if (toast!) {
       this.createToastComponent();
-      setTimeout(
-          () => {
-            this.deleteToast(id!);
-            if (this.toastList.length === 0)
+      this.toastList$.next([...this.toastList$.value, toast]);
+      this.toastList$.pipe(
+          delay(duration),
+          take(1),
+      ).subscribe(() => {
+          this.deleteToast(toast!.id);
+          if (this.toastList$.value.length === 0)
               this.destroyToastComponent();
-          }, duration
-      );
+      });
     }
   }
 
